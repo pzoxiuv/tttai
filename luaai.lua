@@ -1,6 +1,7 @@
 require "my_opencv"
 
-coords = detectAndDisplay("full_shot5.png", "single_square.xml")
+os.execute("scrot board.png")
+coords = detectAndDisplay("board.png", "single_square.xml")
 
 table.sort(coords,
 	function(a, b)
@@ -13,3 +14,5 @@ table.sort(coords,
 for i, t in ipairs(coords) do
     print ("X: " .. t[1] .. " Y: " .. t[2])
 end
+
+doClick(coords[5][1], coords[5][2])

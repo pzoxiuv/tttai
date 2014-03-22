@@ -6,18 +6,21 @@ extern "C" {
 	#include "lua.h"
 	#include "lualib.h"
 	#include "lauxlib.h"
+	#include "xdo.h"
 }
 
 using namespace std;
 using namespace cv;
 
 static int l_detectAndDisplay(lua_State *L);
+static int l_doClick(lua_State *L);
 
 CascadeClassifier board_cascade;
 
 extern "C" int luaopen_my_opencv(lua_State *L)
 {
 	lua_register(L, "detectAndDisplay", l_detectAndDisplay);
+	lua_register(L, "doClick", l_doClick);
 
 	return 0;
 }
@@ -62,9 +65,23 @@ int l_detectAndDisplay(lua_State *L)
 		lua_settable(L, -3);
 	}
 
-	imshow("Board detection", frame);
+//	imshow("Board detection", frame);
 
-	waitKey(0);
+//	waitKey(0);
 
 	return 1;
+}
+
+int l_doClick(lua_State *L)
+{
+	int x = lua_tonumber(L, -2);
+	int y = lua_tonumber(L, -1);
+
+	xdo_t *xdo = xdo_new(":0");
+	xdo_move_mouse(xdo, x, y, 0);
+	xdo_mouse_down(xdo, CURRENTWINDOW, 1);
+	xdo_mouse_up(xdo, CURRENTWINDOW, 1);
+	xdo_free(xdo);
+
+	return 0;
 }
