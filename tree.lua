@@ -21,11 +21,15 @@ function addChildren(r, j, maxDepth)
 			table.insert(childList, newChild)
 		end
 	end
-	r[2] = childList
-
-	for i, t in ipairs(r[2]) do
-		r[2][i] = addChildren(t, j+1, maxDepth)
+	if #childList == 0 then
+		r[2] = nil
+	else
+		r[2] = childList
+		for i, t in ipairs(r[2]) do
+			r[2][i] = addChildren(t, j+1, maxDepth)
+		end
 	end
+
 	return r
 end
 
@@ -101,12 +105,10 @@ end
 function getMove(board)
 	local root = {board, nil}
 
-	root = addChildren(root, 1, 6)
+	root = addChildren(root, 1, 10)
 	--printTree(root)
 	local newBoard = root[2][calcMinimax(root, 0)][1]
 	for i, s in ipairs(newBoard) do
 		if s ~= board[i] then return i end
 	end
 end
-
---print(getMove({1,2,0,0,2,1,2,1,0}))
