@@ -6,6 +6,17 @@ function copyTable(src)
 	return dst
 end
 
+function checkGameOver(b)
+    return (b[1] == b[2] and b[1] == b[3] and b[1] ~= SQ_BLANK) or
+       (b[4] == b[5] and b[4] == b[6] and b[4] ~= SQ_BLANK) or
+       (b[7] == b[8] and b[7] == b[9] and b[7] ~= SQ_BLANK) or
+       (b[1] == b[4] and b[1] == b[7] and b[1] ~= SQ_BLANK) or
+       (b[2] == b[5] and b[2] == b[8] and b[2] ~= SQ_BLANK) or
+       (b[3] == b[6] and b[3] == b[9] and b[3] ~= SQ_BLANK) or
+       (b[1] == b[5] and b[1] == b[9] and b[1] ~= SQ_BLANK) or
+       (b[3] == b[5] and b[3] == b[7] and b[3] ~= SQ_BLANK)
+end
+
 function addChildren(r, j, maxDepth)
 	if j >= maxDepth then return r end
 
@@ -26,7 +37,9 @@ function addChildren(r, j, maxDepth)
 	else
 		r[2] = childList
 		for i, t in ipairs(r[2]) do
-			r[2][i] = addChildren(t, j+1, maxDepth)
+			if checkGameOver(r[2][i][1]) == false then
+				r[2][i] = addChildren(t, j+1, maxDepth)
+			end
 		end
 	end
 
