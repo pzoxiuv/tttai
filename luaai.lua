@@ -1,4 +1,5 @@
 require "my_opencv"
+require "tree"
 
 SQ_BLANK	= 0
 SQ_X		= 1
@@ -44,8 +45,14 @@ table.sort(coords,
 --    print ("X: " .. t[1] .. " Y: " .. t[2])
 --end
 
+-- Make opening click
+doClick(coords[5][1], coords[5][2])
+
 -- Main game loop:
 while true do
+
+	sleep(1); -- Wait for tictactoe-ng to make its move, then take a screenshot of the new board
+	os.execute("scrot board.png")
 
 	-- Get a table with the current board contents
 	board = {}
@@ -57,12 +64,10 @@ while true do
 	if checkGameOver(board) then break end
 
 	-- Otherwise, find a square to move to
-	square = findMove(board)
+	--square = findMove(board)
+	square = getMove(board)
 
 	-- And click there
 	doClick(coords[square][1], coords[square][2])
-
-	sleep(1); -- Wait for tictactoe-ng to make its move, then take a screenshot of the new board
-	os.execute("scrot board.png")
 
 end
